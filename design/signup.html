@@ -1,0 +1,49 @@
+
+
+ 
+<html>
+    <head>  
+        <style> 
+            input{
+                margin:10px;
+            }
+            label{
+                margin:10px;
+                 width:200px;
+                 float:left;
+                 }
+              #f2
+              {
+                background-image:url(p2.jpg);
+                height:100%;
+              }
+        
+        </style>  
+
+     
+    </head>
+
+
+
+
+    
+    
+   <body>
+     <form  id="f2" action ="signup.php" method="POST" enctype="multipart/form-data">
+         <label>Full Name:</label><input type="text" name="name" required/><br/>
+         <label>Username: </label><input type="text" name ="username" required /><br/>
+         <label>Email: </label><input type="email" name="email" required /><br/>
+         <label> Password:</label><input type="password" name="password" required /><br/>
+         <label> Re-enter Password:</label><input type="password" name="password" required /><br/>
+         <br/> 
+          <input type="submit" name= "submit" value="Create account"/>
+
+    
+     </form>
+    </body>
+   </html>
+   
+   
+   <?php
+   include('footer.php');
+   ?>
