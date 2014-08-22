@@ -1,38 +1,30 @@
 <?php
 session_start();
 include('header.php');
+include('liv.php');
+include('repeatedhtmlpart.php');
+;
 if(!empty($_SESSION['username']))
+{
+    $con=db_connect('localhost','root','nirmala12','quiz');
     
     
-    {
     if(isset($_GET['categoryid'])||(isset($_GET['quizid'])))
     {
- $con=mysqli_connect('localhost','root','nirmala12','quiz');
- $categoryid=$_GET['categoryid'];
+           
+            $categoryid=$_GET['categoryid'];
  //echo $categoryid;
- $quizid=$_GET['quizid'];
-
- $query= "SELECT categoryname FROM category WHERE categoryid='$categoryid'";
- $result=mysqli_query($con,$query);
- while($data=mysqli_fetch_array($result))
- {$categoryname=$data[0];}
- echo 'Categoryname:';
- echo $categoryname;
- echo '</br>';
- $query= "SELECT quizname FROM quizzes WHERE quizid='$quizid'";
- $result=mysqli_query($con,$query);
- $data=mysqli_fetch_array($result);
- $quizname=$data[0];
-  //echo "category selected:".$categoryname.'<br/>';
-          echo "quiz selected:".$quizname.'<br/>';
- 
- 
- $query1="SELECT * FROM questions where categoryid='$categoryid' AND quizid='$quizid' ";
- $result=mysqli_query($con,$query1);
-
-
- $numalready=mysqli_num_rows($result);
- echo $numalready;
+             $quizid=$_GET['quizid'];
+            $categoryname=find_categoryname($con,$categoryid);
+            echo 'Categoryname:';
+            echo $categoryname;
+            echo '</br>';
+            $quizname=find_quizname($con,$quizid);
+            echo "quiz selected:".$quizname.'<br/>';
+           $query1="SELECT * FROM questions where categoryid='$categoryid' AND quizid='$quizid' ";
+           $result=mysqli_query($con,$query1);
+           $numalready=mysqli_num_rows($result);
+           echo $numalready;
  
  
 if (isset($_GET['addquestion']))
@@ -45,37 +37,22 @@ if (isset($_GET['addquestion']))
     exit();
 }
 
-elseif(isset ($_GET['lateron']))
-{
-//redirect to home page
-}
-
 
 ?>
 
 
 
 <html>
-    <head><head>
+    <head>
         <title>home</title>
-        <style>
-          
-           input
-           {
-             margin:40px;
-           }
-        </style>
-   
-           
-    </head>
-        
-    </head>
+        <link rel="stylesheet" type="text/css" href="quiz.css" />
+     </head>
     <body> 
         
         <form action="addquestion.php" method="GET">
         <label>enter number of questions to be added</label><input type="text" name="number"/><br/>
        <input type="hidden" name="categoryid" value="<?php echo $categoryid; ?>"/>
-       <input type="hidden" name="quizid" value="<?php echo $quizid ?>" /> 
+       <input type="hidden" name="quizid" value="<?php echo $quizid; ?>" /> 
        
          <input type="submit" name="addquestion" value="add questions in the quiz"/><br/>
         </form> 

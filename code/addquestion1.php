@@ -3,78 +3,37 @@
 <?php
 session_start();
 include('header.php');
+include('liv.php');
+include('repeatedhtmlpart.php');
 if(!empty($_SESSION['username']))
-    {
+    {  $con= db_connect('localhost','root','nirmala12','quiz');
       if(isset($_GET['categoryid'])&&(isset($_GET['quizid'])))
     {
-          $con= mysqli_connect('localhost','root','nirmala12','quiz');
-          $categoryid=$_GET['categoryid'];
-          $quizid=$_GET['quizid'];
-          echo $quizid;
-          $number=$_GET['number'];
-          $num=$_COOKIE['num'];
-          if(isset($_GET['questionsalready']))
+      $categoryid=$_GET['categoryid'];
+      $quizid=$_GET['quizid'];
+      $number=$_GET['number'];
+      $num=$_COOKIE['num']; // starting question number for the next page
+         if(isset($_GET['questionsalready']))
           {
           $alreadyadded=$_GET['questionsalready'];
           }
-          $qn=$num-$number+1;
-         
-        //  echo "number of question to be entered".$number;
-          
-          $query="SELECT categoryname FROM category WHERE categoryid='$categoryid'";
-          $result= mysqli_query($con,$query);
-         while($data=mysqli_fetch_array($result))
-         {       
-          $categoryname=$data[0];
-         }
-          $query="SELECT quizname FROM quizzes WHERE quizid='$quizid'";
-          $result=mysqli_query($con,$query);
-         while ($data=mysqli_fetch_array($result))
-         {
-          $quizname=$data[0];
-         }
-            echo "category selected:".$categoryname.'<br/>';
-          echo "quiz selected:".$quizname.'<br/>';
-          echo '<br>question number :';
-          echo $qn;
-          
-          
-         if(isset($_GET['submit']))
+          $qn=$num-$number+1;// to  question number
+           if(isset($_GET['submit']))
            { 
               $questionname=$_GET['questionname'];
               $question=$_GET['question'];
               $answer=$_GET['answer'];
               $number=$_GET['number'];
-              $sql="INSERT INTO questions(questionname,question,answer,categoryid,quizid,questionnumber) VALUES('$questionname','$question','$answer','$categoryid','$quizid',$qn)";
-              mysqli_query($con,$sql);
-             
-              print("<script>location.href='addquestion2.php?categoryid=$categoryid&quizid=$quizid&number=$number' </script>");
+              //save question in the data base
+              insert_question($con,$questionname,$question,$answer,$categoryid,$quizid,$qn);
            }
        ?>
-
-
-
-
-
-
 <html>
    <head>
         <title>home</title>
-        <style>
+        <link rel='stylesheet' type='text/css' href='quiz.css' />
            
-            form
-            {
-                margin:10px;
-            }
-            
-           input
-           {
-             margin:40px;
-           }
-        </style>
-   
-           
-    </head> 
+  </head> 
 
     <div>
     <form action="addquestion1.php" method="GET" >
@@ -91,7 +50,6 @@ if(!empty($_SESSION['username']))
     </form>
     </div>
 </html>
-
 
 <?php include('footer.php');
     }
